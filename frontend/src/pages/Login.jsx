@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "../components/AuthLayout";
 import { login } from "../services/api";
+import { useAuth } from "../context/useAuth";
 
 export default function Login() {
+  const { fazerLogin } = useAuth();
+
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
@@ -16,7 +20,8 @@ export default function Login() {
     setCarregando(true);
     try {
         const dados = await login(email, senha);
-        console.log("Login realizado:", dados);
+        fazerLogin(dados);
+        navigate("/");
     } catch (erro) {
         setErro(erro.message);
     } finally {
@@ -51,6 +56,7 @@ export default function Login() {
                 onChange={(event) => setEmail(event.target.value)}
                 placeholder="voce@email.com"
                 required
+                autoComplete="email"
                 className="w-full rounded-md border border-[#ff7800] bg-black px-4 py-3 text-sm text-white outline-none placeholder:text-white/30 transition focus:border-[#ff9a3d] focus:ring-1 focus:ring-[#ff7800]"
                 />
             </div>
@@ -70,6 +76,7 @@ export default function Login() {
                 placeholder="Mínimo de 6 caracteres"
                 required
                 minLength={6}
+                autoComplete="current-password"
                 className="w-full rounded-md border border-[#ff7800] bg-black px-4 py-3 text-sm text-white outline-none placeholder:text-white/30 transition focus:border-[#ff9a3d] focus:ring-1 focus:ring-[#ff7800]"
                 />
 
