@@ -40,7 +40,7 @@ export default function Header() {
             to="/entrar"
             className="rounded-md bg-white px-5 py-2 font-medium text-[#df7916] transition hover:bg-orange-50"
           >
-            ENTRAR
+            PAINEL
           </Link>
         </nav>
 
