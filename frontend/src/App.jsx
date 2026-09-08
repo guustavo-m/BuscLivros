@@ -1,8 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
-import ProtectedRoute from "./components/ProtectedRoute";
-import Home from "./pages/HomeTest";
+import Administrador from "./pages/Painel";
 
 export default function App() {
   return (
@@ -20,6 +19,10 @@ export default function App() {
           <Route
             path="/"
             element={<Home />}
+          />
+          <Route
+            path="/administrador"
+            element={<Administrador />}
           />
         </Route>
       </Routes>
