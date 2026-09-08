@@ -1,9 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
-import Home from "./components/HomeGeral";
+import Home from "./pages/HomeTest";
 import Administrador from "./pages/Painel";
-import ProtectedRoute from "./components/ProtectedRoute"; 
+import ProtectedRoute from "./components/ProtectedRoute";
+
 export default function App() {
   return (
     <BrowserRouter>

@@ -1,4 +1,26 @@
 import { useState } from "react";
+import { z } from "zod";
+
+const livroSchema = z.object({
+  titulo: z.string().trim().min(1, "Informe o título do livro."),
+  autor: z.string().trim().min(1, "Informe o autor."),
+  categoria: z.string().trim().min(1, "Informe a categoria."),
+  editora: z.string().trim().min(1, "Informe a editora."),
+  ano: z.preprocess(
+    (valor) => (valor === "" ? undefined : Number(valor)),
+    z.number({ invalid_type_error: "Informe um ano válido." }).int().min(1000, "Informe um ano válido.")
+  ),
+  paginas: z.preprocess(
+    (valor) => (valor === "" ? undefined : Number(valor)),
+    z.number({ invalid_type_error: "Informe um número de páginas válido." }).int().positive("Informe um número de páginas válido.")
+  ),
+  nota: z.preprocess(
+    (valor) => (valor === "" ? undefined : Number(valor)),
+    z.number({ invalid_type_error: "Informe uma nota válida." }).min(0, "A nota mínima é 0.").max(10, "A nota máxima é 10.")
+  ),
+  imagem: z.string().min(1, "Escolha uma imagem para a capa."),
+  descricao: z.string().trim().min(1, "Informe a sinopse do livro.")
+});
 
 const formularioVazio = {
   titulo: "",
@@ -16,12 +38,14 @@ const estiloInput = "mt-1 w-full rounded-md border border-orange-500 bg-zinc-900
 
 export default function CadastroLivros() {
   const [livro, setLivro] = useState(formularioVazio);
+  const [erros, setErros] = useState({});
   const [mensagem, setMensagem] = useState("");
   const [enviando, setEnviando] = useState(false);
 
   function mudarCampo(event) {
     const { name, value } = event.target;
     setLivro((prev) => ({ ...prev, [name]: value }));
+    setErros((prev) => ({ ...prev, [name]: "" }));
   }
 
   function escolherImagem(event) {
@@ -33,6 +57,7 @@ export default function CadastroLivros() {
 
     leitor.onload = () => {
       setLivro((prev) => ({ ...prev, imagem: leitor.result }));
+      setErros((prev) => ({ ...prev, imagem: "" }));
     };
 
     leitor.readAsDataURL(arquivo);
@@ -42,22 +67,25 @@ export default function CadastroLivros() {
     event.preventDefault();
     setMensagem("");
 
-    const camposObrigatorios = Object.values(livro).some((valor) => {
-      if (typeof valor === "string") {
-        return valor.trim() === "";
-      }
-      return valor === "";
-    });
+    const resultado = livroSchema.safeParse(livro);
 
-    if (camposObrigatorios) {
-      setMensagem("Preencha todos os campos antes de cadastrar.");
+    if (!resultado.success) {
+      const novosErros = {};
+
+      resultado.error.issues.forEach((erro) => {
+        const campo = erro.path[0];
+        novosErros[campo] = erro.message;
+      });
+
+      setErros(novosErros);
       return;
     }
 
+    setErros({});
     setEnviando(true);
 
     try {
-      console.log("Livro cadastrado:", livro);
+      console.log("Livro cadastrado:", resultado.data);
       setLivro(formularioVazio);
       setMensagem("Livro cadastrado com sucesso!");
     } catch {
@@ -94,42 +122,50 @@ export default function CadastroLivros() {
               </div>
 
               <p className="mt-2 text-xs text-zinc-500">JPG, PNG ou WEBP.</p>
+              <p className="mt-1 min-h-4 text-xs text-orange-400">{erros.imagem}</p>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label className="text-sm font-semibold">Título</label>
                 <input name="titulo" value={livro.titulo} onChange={mudarCampo} className={estiloInput} />
+                <p className="mt-1 min-h-4 text-xs text-orange-400">{erros.titulo}</p>
               </div>
 
               <div>
                 <label className="text-sm font-semibold">Autor</label>
                 <input name="autor" value={livro.autor} onChange={mudarCampo} className={estiloInput} />
+                <p className="mt-1 min-h-4 text-xs text-orange-400">{erros.autor}</p>
               </div>
 
               <div>
                 <label className="text-sm font-semibold">Categoria</label>
                 <input name="categoria" value={livro.categoria} onChange={mudarCampo} className={estiloInput} />
+                <p className="mt-1 min-h-4 text-xs text-orange-400">{erros.categoria}</p>
               </div>
 
               <div>
                 <label className="text-sm font-semibold">Editora</label>
                 <input name="editora" value={livro.editora} onChange={mudarCampo} className={estiloInput} />
+                <p className="mt-1 min-h-4 text-xs text-orange-400">{erros.editora}</p>
               </div>
 
               <div>
                 <label className="text-sm font-semibold">Ano de publicação</label>
                 <input type="number" name="ano" value={livro.ano} onChange={mudarCampo} className={estiloInput} />
+                <p className="mt-1 min-h-4 text-xs text-orange-400">{erros.ano}</p>
               </div>
 
               <div>
                 <label className="text-sm font-semibold">Número de páginas</label>
                 <input type="number" name="paginas" value={livro.paginas} onChange={mudarCampo} className={estiloInput} />
+                <p className="mt-1 min-h-4 text-xs text-orange-400">{erros.paginas}</p>
               </div>
 
               <div>
                 <label className="text-sm font-semibold">Nota</label>
                 <input type="number" min="0" max="10" step="0.1" name="nota" value={livro.nota} onChange={mudarCampo} className={estiloInput} />
+                <p className="mt-1 min-h-4 text-xs text-orange-400">{erros.nota}</p>
               </div>
             </div>
           </div>
@@ -137,6 +173,7 @@ export default function CadastroLivros() {
           <div>
             <label className="text-sm font-semibold">Sinopse</label>
             <textarea name="descricao" value={livro.descricao} onChange={mudarCampo} rows="5" className={`${estiloInput} resize-none`} />
+            <p className="mt-1 min-h-4 text-xs text-orange-400">{erros.descricao}</p>
           </div>
 
           {mensagem && <p className="rounded border border-orange-500 p-3 text-sm text-orange-400">{mensagem}</p>}
