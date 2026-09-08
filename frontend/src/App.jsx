@@ -3,25 +3,28 @@ import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
 import Administrador from "./pages/Painel";
 
-function Home() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-black text-white">
-      <h1 className="font-serif text-4xl">
-        BuscLivros
-      </h1>
-    </div>
-  );
-}
-
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/cadastro" element={<Cadastro />} />
-     <Route path="/administrador" element={<Administrador />} />
-
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+        <Route
+          path="/cadastro"
+          element={<Cadastro />}
+        />
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/"
+            element={<Home />}
+          />
+          <Route
+            path="/administrador"
+            element={<Administrador />}
+          />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
