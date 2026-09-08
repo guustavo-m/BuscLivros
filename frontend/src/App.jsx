@@ -1,9 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
-import Home from "./components/HomeGeral";
+import Home from "./pages/HomeTest";
 import Administrador from "./pages/Painel";
 import ProtectedRoute from "./components/ProtectedRoute"; 
+import DetalheItem from "./pages/DetalheItem";
+import PesquisarLivros from "./pages/PesquisarLivros";
+import ItemCard from "./components/ItemCard";
 export default function App() {
   return (
     <BrowserRouter>
@@ -24,6 +27,20 @@ export default function App() {
           <Route
             path="/administrador"
             element={<Administrador />}
+        />
+
+           <Route
+            path="/pesquisar"
+          element={<PesquisarLivros />}
+        />
+
+        <Route
+          path="/livro/:id"
+          element={<DetalheItem />}
+        />
+        <Route
+          path="/item/:id"
+          element={<ItemCard />}
           />
         </Route>
       </Routes>
