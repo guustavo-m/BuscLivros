@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import AuthLayout from "../components/AuthLayout";
+import { cadastro } from "../services/api";
 
 export default function Cadastro() {
 
@@ -8,18 +9,28 @@ export default function Cadastro() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
+  const [erro, setErro] = useState("");
+  const [carregando, setCarregando] = useState(false);
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
+    setErro("");
+
     if (senha !== confirmarSenha) {
-      alert("As senhas não são iguais.");
+      setErro("As senhas não são iguais.");
       return;
     }
-    console.log({
-      nome,
-      email,
-      senha
-    });
+    
+    setCarregando(true);
+
+    try {
+      const dados = await cadastro(nome, email, senha);
+      console.log("Cadastro realizado:", dados);
+    } catch (erro) {
+      setErro(erro.message);
+    } finally {
+      setCarregando(false);
+    }
   }
 
   return (
@@ -47,6 +58,7 @@ export default function Cadastro() {
               placeholder="Seu Nome"
               required
               minLength={3}
+              autoComplete="name"
               className="w-full rounded-md border border-[#ff7800] bg-black px-4 py-3 text-sm text-white outline-none placeholder:text-white/30 transition focus:border-[#ff9a3d] focus:ring-1 focus:ring-[#ff7800]"
             />
           </div>
@@ -63,6 +75,7 @@ export default function Cadastro() {
               onChange={(event) => setEmail(event.target.value)}
               placeholder="voce@email.com"
               required
+              autoComplete="email"
               className="w-full rounded-md border border-[#ff7800] bg-black px-4 py-3 text-sm text-white outline-none placeholder:text-white/30 transition focus:border-[#ff9a3d] focus:ring-1 focus:ring-[#ff7800]"
             />
           </div>
@@ -80,6 +93,7 @@ export default function Cadastro() {
               placeholder="Mínimo de 6 caracteres"
               required
               minLength={6}
+              autoComplete="new-password"
               className="w-full rounded-md border border-[#ff7800] bg-black px-4 py-3 text-sm text-white outline-none placeholder:text-white/30 transition focus:border-[#ff9a3d] focus:ring-1 focus:ring-[#ff7800]"
             />
           </div>
@@ -97,14 +111,22 @@ export default function Cadastro() {
               placeholder="Repita a sua senha"
               required
               minLength={6}
+              autoComplete="new-password"
               className="w-full rounded-md border border-[#ff7800] bg-black px-4 py-3 text-sm text-white outline-none placeholder:text-white/30 transition focus:border-[#ff9a3d] focus:ring-1 focus:ring-[#ff7800]"
             />
           </div>
 
+          {erro && (
+            <p className="rounded-md border border-red-500/40 bg-red-500/10 px-4 py-3 text-xs text-red-400">
+              {erro}
+            </p>
+          )}
+
           <button
             type="submit"
-            className="w-full rounded-md bg-[#ff7800] px-4 py-3 text-sm font-semibold text-black transition hover:bg-[#ff8c1a] active:scale-[0.99]">
-            Criar Conta
+            disabled={carregando}
+            className="w-full rounded-md bg-[#ff7800] px-4 py-3 text-sm font-semibold text-black transition hover:bg-[#ff8c1a] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60">
+            {carregando ? "Criando..." : "Criar Conta"}
           </button>
         </form>
 

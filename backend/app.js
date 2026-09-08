@@ -15,7 +15,7 @@ app.use('/livros', verificarToken, livrosRoutes);
 const usuariosRoutes = require('./src/routes/usuariosRoutes');
 app.use('/usuarios', verificarToken, usuariosRoutes);
 
-const authRoutes = require('./routes/authRoutes');
+const authRoutes = require('./src/routes/authRoutes');
 app.use('/api/auth', authRoutes);
 
 app.get('/', (req, res) => {
