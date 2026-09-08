@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import DetalheItem from "./pages/DetalheItem";
 import PesquisarLivros from "./pages/PesquisarLivros";
 import ItemCard from "./components/ItemCard";
+
 export default function App() {
   return (
     <BrowserRouter>
