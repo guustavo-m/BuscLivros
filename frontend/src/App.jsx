@@ -1,16 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
-
-function Home() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-black text-white">
-      <h1 className="font-serif text-4xl">
-        BuscLivros
-      </h1>
-    </div>
-  );
-}
+import Home from "./components/HomeGeral";
 
 export default function App() {
   return (
