@@ -28,13 +28,28 @@ async function buscarPorId(req, res) {
       res.status(200).json(livro);
     } else {
       res.status(404).json({ 
-        mensagem: `Livro ${id} não encontrada` 
+        mensagem: `Livro ${id} não encontrado` 
       });
     }
   } catch (erro) {
     res.status(500).json({ 
       mensagem: 'Erro ao buscar livro',
       erro: erro.message 
+    });
+  }
+}
+
+async function listarCategorias(req, res) {
+  try {
+    const categorias = await LivrosModel.listarCategorias();
+
+    res.status(200).json(categorias);
+  } catch (erro) {
+    console.error(erro);
+
+    res.status(500).json({
+      mensagem: 'Erro ao listar categorias',
+      erro: erro.message
     });
   }
 }
@@ -107,7 +122,7 @@ async function atualizar(req, res) {
       res.status(200).json(livroAtualizado);
     } else {
       res.status(404).json({ 
-        mensagem: `Livro ${id} não encontrada` 
+        mensagem: `Livro ${id} não encontrado` 
       });
     }
   } catch (erro) {
@@ -132,11 +147,11 @@ async function deletar(req, res) {
     
     if (deletado) {
       res.status(200).json({ 
-        mensagem: `Livro ${id} removida com sucesso` 
+        mensagem: `Livro ${id} removido com sucesso` 
       });
     } else {
       res.status(404).json({ 
-        mensagem: `Livro ${id} não encontrada` 
+        mensagem: `Livro ${id} não encontrado` 
       });
     }
   } catch (erro) {
@@ -150,6 +165,7 @@ async function deletar(req, res) {
 module.exports = {
   listarTodos,
   buscarPorId,
+  listarCategorias,
   criar,
   atualizar,
   deletar

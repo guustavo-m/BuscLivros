@@ -5,12 +5,12 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '20mb' }));
 
 const { verificarToken } = require('./src/middlewares/authMiddleware');
 
 const livrosRoutes = require('./src/routes/livrosRoutes');
-app.use('/livros', verificarToken, livrosRoutes);
+app.use('/livros', livrosRoutes);
 
 const usuariosRoutes = require('./src/routes/usuariosRoutes');
 app.use('/usuarios', verificarToken, usuariosRoutes);

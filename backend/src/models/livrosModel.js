@@ -17,6 +17,18 @@ async function buscarPorId(id) {
   return result.rows[0];
 }
 
+async function listarCategorias() {
+  const result = await pool.query(`
+    SELECT DISTINCT categoria
+    FROM livros
+    WHERE categoria IS NOT NULL
+      AND categoria <> ''
+    ORDER BY categoria
+  `);
+
+  return result.rows.map((item) => item.categoria);
+}
+
 async function criar(dados) {
   const { titulo, ano, editora, autor, imagem, descricao, paginas, categoria, nota } = dados;
 
@@ -64,6 +76,7 @@ async function deletar(id) {
 module.exports = {
   listarTodos,
   buscarPorId,
+  listarCategorias,
   criar,
   atualizar,
   deletar
