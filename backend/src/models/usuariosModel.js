@@ -2,18 +2,26 @@ const pool = require('../config/database');
 
 async function listarTodos() {
   const result = await pool.query(
-    'SELECT * FROM usuarios ORDER BY id'
+    `
+      SELECT id, nome, email, tipo
+      FROM usuarios
+      ORDER BY id
+    `
   );
+
   return result.rows;
 }
 
 async function buscarPorId(id) {
-  // PostgreSQL usa $1, $2, $3... como placeholders
-  // (SQLite usava ? ? ?)
   const result = await pool.query(
-    'SELECT * FROM usuarios WHERE id = $1',
+    `
+      SELECT id, nome, email, tipo
+      FROM usuarios
+      WHERE id = $1
+    `,
     [id]
   );
+
   return result.rows[0];
 }
 
@@ -23,32 +31,40 @@ async function criar(dados) {
   const sql = `
     INSERT INTO usuarios (nome, email, senha)
     VALUES ($1, $2, $3)
-    RETURNING *
+    RETURNING id, nome, email, tipo
   `;
-  
+
   const result = await pool.query(
     sql,
     [nome, email, senha]
   );
-  
+
   return result.rows[0];
 }
 
 async function atualizar(id, dados) {
-  const { nome, email, senha } = dados;
-  
+  const { nome, email, tipo } = dados;
+
   const sql = `
     UPDATE usuarios
-    SET nome = $1, email = $2, senha = $3
+    SET
+      nome = $1,
+      email = $2,
+      tipo = $3
     WHERE id = $4
-    RETURNING *
+    RETURNING id, nome, email, tipo
   `;
-  
+
   const result = await pool.query(
     sql,
-    [nome, email, senha, id]
+    [
+      nome,
+      email,
+      tipo,
+      id
+    ]
   );
-  
+
   return result.rows[0] || null;
 }
 
