@@ -23,7 +23,7 @@ export default function PesquisarLivros() {
         setErro("");
 
         const resposta = await fetch(
-          "http://localhost:3000/livros&quot;
+          "http://localhost:3000/livros"
         );
 
         if (!resposta.ok) {
@@ -51,7 +51,7 @@ export default function PesquisarLivros() {
         setErroCategorias("");
 
         const resposta = await fetch(
-          "http://localhost:3000/livros/categorias&quot;
+          "http://localhost:3000/livros/categorias"
         );
 
         if (!resposta.ok) {
