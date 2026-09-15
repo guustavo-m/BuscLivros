@@ -52,3 +52,26 @@ const livroSchema = z.object({
         "Informe um número de páginas válido."
       )
   ),
+
+  
+  nota: z.preprocess(
+    (valor) => (
+      valor === "" ? undefined : Number(valor)
+    ),
+    z
+      .number({
+        invalid_type_error: "Informe uma nota válida.",
+      })
+      .min(0, "A nota mínima é 0.")
+      .max(10, "A nota máxima é 10.")
+  ),
+
+  imagem: z
+    .string()
+    .min(1, "Escolha uma imagem para a capa."),
+
+  descricao: z
+    .string()
+    .trim()
+    .min(1, "Informe a sinopse do livro."),
+});
