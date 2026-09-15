@@ -18,7 +18,7 @@ export default function ItemCard({ livro }) {
       <div className="relative h-[285px] bg-black">
         <img
           src={livro.imagem}
-          alt={livro.nome}
+          alt={livro.titulo}
           className="w-full h-full object-cover"
         />
 
@@ -44,7 +44,7 @@ export default function ItemCard({ livro }) {
         <h2
           className="font-serif text-[18px] leading-5 min-h-[42px] mb-2"
         >
-          {livro.nome}
+          {livro.titulo}
         </h2>
 
         <div
