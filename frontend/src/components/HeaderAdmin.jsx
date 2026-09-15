@@ -1,7 +1,16 @@
 import { IoBookOutline } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/useAuth";
 
 export default function Header() {
+  const { fazerLogout } = useAuth();
+  const navigate = useNavigate();
+
+  function sair() {
+    fazerLogout();
+    navigate("/");
+  }
+
   return (
     <header className="bg-amber-600 text-white">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
@@ -15,6 +24,7 @@ export default function Header() {
         </Link>
 
         <nav className="hidden items-center gap-8 text-sm md:flex">
+
           <Link
             to="/"
             className="transition hover:text-orange-100"
@@ -37,13 +47,20 @@ export default function Header() {
           </Link>
 
           <Link
-            to="/entrar"
+            to="/administrador"
             className="rounded-md bg-white px-5 py-2 font-medium text-[#df7916] transition hover:bg-orange-50"
           >
             PAINEL
           </Link>
-        </nav>
 
+          <button
+            onClick={sair}
+            className="rounded-md bg-white px-5 py-2 font-medium text-[#df7916] transition hover:bg-orange-50"
+          >
+            SAIR
+          </button>
+
+        </nav>
       </div>
     </header>
   );
