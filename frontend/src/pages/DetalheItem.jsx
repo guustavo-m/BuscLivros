@@ -14,9 +14,18 @@ export default function DetalheItem() {
     async function buscarLivro() {
       try {
         setCarregando(true);
+        setErro("");
+
+        // Pega o token salvo no login
+        const token = localStorage.getItem("jwtToken");
 
         const resposta = await fetch(
-          `http://localhost:3000/api/livros/${id}`
+          `http://localhost:3000/livros/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
         if (!resposta.ok) {
@@ -26,6 +35,7 @@ export default function DetalheItem() {
         const dados = await resposta.json();
 
         setLivro(dados);
+
       } catch (error) {
         console.error(error);
         setErro("Não foi possível carregar o livro.");
@@ -97,7 +107,7 @@ export default function DetalheItem() {
 
             <Campo
               titulo="Nome"
-              valor={livro.nome}
+              valor={livro.titulo}
             />
 
             <Campo
@@ -146,7 +156,7 @@ export default function DetalheItem() {
 
               <img
                 src={livro.imagem}
-                alt={livro.nome}
+                alt={livro.titulo}
                 className="w-[300px] md:w-[380px] h-[380px] md:h-[430px] object-cover
                 "
               />
