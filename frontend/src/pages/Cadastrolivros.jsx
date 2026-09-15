@@ -106,3 +106,21 @@ export default function CadastroLivros() {
     if (!modoEdicao) {
       return;
     }
+
+     async function buscarLivro() {
+      try {
+        setCarregandoLivro(true);
+        setMensagem("");
+
+        const resposta = await fetch(
+          `http://localhost:3000/livros/${id}`
+        );
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+          throw new Error(
+            dados.mensagem ||
+              "Erro ao carregar o livro."
+          );
+        }
