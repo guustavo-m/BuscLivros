@@ -124,3 +124,31 @@ export default function CadastroLivros() {
               "Erro ao carregar o livro."
           );
         }
+
+             setLivro({
+          titulo: dados.titulo ?? "",
+          autor: dados.autor ?? "",
+          categoria: dados.categoria ?? "",
+          editora: dados.editora ?? "",
+          ano: dados.ano ?? "",
+          paginas: dados.paginas ?? "",
+          nota: dados.nota ?? "",
+          imagem: dados.imagem ?? "",
+          descricao: dados.descricao ?? "",
+        });
+
+      } catch (erro) {
+        console.error(
+          "Erro ao carregar livro:",
+          erro
+        );
+
+        setMensagem(
+          erro.message ||
+            "Não foi possível carregar o livro."
+        );
+
+      } finally {
+        setCarregandoLivro(false);
+      }
+    }
