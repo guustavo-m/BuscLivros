@@ -75,3 +75,52 @@ const livroSchema = z.object({
     .trim()
     .min(1, "Informe a sinopse do livro."),
 });
+
+const formularioVazio = {
+  titulo: "",
+  autor: "",
+  categoria: "",
+  editora: "",
+  ano: "",
+  paginas: "",
+  nota: "",
+  imagem: "",
+  descricao: "",
+};
+
+const estiloInput = "mt-1 w-full rounded-md border border-orange-500 bg-zinc-900 px-3 py-2 text-sm text-white outline-none focus:ring-2 focus:ring-orange-400";
+
+export default function CadastroLivros() {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const modoEdicao = Boolean(id);
+  const [livro, setLivro] = useState(
+    formularioVazio
+  );
+  const [erros, setErros] = useState({});
+  const [mensagem, setMensagem] = useState("");
+  const [enviando, setEnviando] = useState(false);
+  const [carregandoLivro, setCarregandoLivro] = useState(modoEdicao);
+
+  useEffect(() => {
+    if (!modoEdicao) {
+      return;
+    }
+
+     async function buscarLivro() {
+      try {
+        setCarregandoLivro(true);
+        setMensagem("");
+
+        const resposta = await fetch(
+          `http://localhost:3000/livros/${id}`
+        );
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+          throw new Error(
+            dados.mensagem ||
+              "Erro ao carregar o livro."
+          );
+        }
