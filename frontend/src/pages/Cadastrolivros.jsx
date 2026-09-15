@@ -152,3 +152,36 @@ export default function CadastroLivros() {
         setCarregandoLivro(false);
       }
     }
+
+        buscarLivro();
+  }, [id, modoEdicao]);
+
+  function voltar() {
+    navigate("/pesquisar");
+  }
+
+  function mudarCampo(event) {
+    const { name, value } = event.target;
+
+    setLivro((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    setErros((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
+
+    setMensagem("");
+  }
+
+  function escolherImagem(event) {
+    const arquivo =
+      event.target.files?.[0];
+
+    if (!arquivo) {
+      return;
+    }
+
+    const leitor = new FileReader();
