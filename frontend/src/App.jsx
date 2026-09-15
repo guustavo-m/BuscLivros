@@ -3,7 +3,10 @@ import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
 import Home from "./pages/HomeAdmin";
 import Administrador from "./pages/Painel";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/ProtectedRoute"; 
+import DetalheItem from "./pages/DetalheItem";
+import PesquisarLivros from "./pages/PesquisarLivros";
+import ItemCard from "./components/ItemCard";
 
 export default function App() {
   return (
@@ -25,6 +28,20 @@ export default function App() {
           <Route
             path="/administrador"
             element={<Administrador />}
+        />
+
+           <Route
+            path="/pesquisar"
+          element={<PesquisarLivros />}
+        />
+
+        <Route
+          path="/livro/:id"
+          element={<DetalheItem />}
+        />
+        <Route
+          path="/item/:id"
+          element={<ItemCard />}
           />
         </Route>
       </Routes>
