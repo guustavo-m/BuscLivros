@@ -16,6 +16,7 @@ async function login(req, res) {
       'SELECT id, nome, email, senha, tipo FROM usuarios WHERE email = $1',
       [email]
     );
+
     if (resultado.rows.length === 0) {
       return res.status(401).json({
         mensagem: 'Credenciais inválidas'
@@ -30,11 +31,9 @@ async function login(req, res) {
     );
 
     if (!senhaValida) {
-
       return res.status(401).json({
         mensagem: 'Credenciais inválidas'
       });
-
     }
 
     const payload = {
@@ -66,42 +65,33 @@ async function login(req, res) {
     });
 
   } catch (erro) {
-
     console.error(erro);
 
     return res.status(500).json({
       mensagem: 'Erro interno do servidor'
     });
-
   }
-
 }
 
 async function cadastro(req, res) {
-
   const { nome, email, senha } = req.body;
 
   if (!nome || !email || !senha) {
-
     return res.status(400).json({
       mensagem: 'Nome, e-mail e senha são obrigatórios'
     });
-
   }
 
   try {
-
     const usuarioExistente = await pool.query(
       'SELECT id FROM usuarios WHERE email = $1',
       [email]
     );
 
     if (usuarioExistente.rows.length > 0) {
-
       return res.status(409).json({
         mensagem: 'Este e-mail já está cadastrado'
       });
-
     }
 
     const senhaHash = await bcrypt.hash(senha, 10);
@@ -113,21 +103,38 @@ async function cadastro(req, res) {
       [nome, email, senhaHash]
     );
 
+    const usuario = resultado.rows[0];
+
+    const payload = {
+      id: usuario.id,
+      nome: usuario.nome,
+      email: usuario.email,
+      tipo: usuario.tipo
+    };
+
+    const secret = process.env.JWT_SECRET;
+
+    const token = jwt.sign(
+      payload,
+      secret,
+      {
+        expiresIn: '2h'
+      }
+    );
+
     return res.status(201).json({
       mensagem: 'Usuário cadastrado com sucesso',
-      usuario: resultado.rows[0]
+      token,
+      usuario
     });
 
   } catch (erro) {
-
     console.error(erro);
 
     return res.status(500).json({
       mensagem: 'Erro interno do servidor'
     });
-
   }
-
 }
 
 module.exports = {
