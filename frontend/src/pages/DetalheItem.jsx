@@ -14,9 +14,18 @@ export default function DetalheItem() {
     async function buscarLivro() {
       try {
         setCarregando(true);
+        setErro("");
+
+        // Pega o token salvo no login
+        const token = localStorage.getItem("jwtToken");
 
         const resposta = await fetch(
-          `http://localhost:3000/livros/ID/${id}`
+          `http://localhost:3000/livros/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
         if (!resposta.ok) {
@@ -26,6 +35,7 @@ export default function DetalheItem() {
         const dados = await resposta.json();
 
         setLivro(dados);
+
       } catch (error) {
         console.error(error);
         setErro("Não foi possível carregar o livro.");

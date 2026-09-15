@@ -70,7 +70,7 @@ export default function Home() {
             </h2>
 
             <Link
-              to="/livros"
+              to="/pesquisar"
               className="flex items-center gap-1 text-sm text-amber-600 hover:underline"
             >
               Ver Todos

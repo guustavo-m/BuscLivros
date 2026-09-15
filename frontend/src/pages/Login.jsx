@@ -7,7 +7,6 @@ import { useAuth } from "../context/useAuth";
 export default function Login() {
   const { fazerLogin } = useAuth();
   const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState("");
@@ -20,12 +19,13 @@ export default function Login() {
 
     try {
       const dados = await login(email, senha);
+      localStorage.setItem("jwtToken", dados.token);
       fazerLogin(dados);
 
-      if (dados.usuario.tipo === "admin") { 
-        navigate("/home-admin"); 
-      } else { 
-        navigate("/"); 
+      if (dados.usuario.tipo === "admin") {
+        navigate("/home-admin");
+      } else {
+        navigate("/");
       }
 
     } catch (erro) {
@@ -44,6 +44,7 @@ export default function Login() {
         <p className="mt-2 text-sm text-white/60">
           Acesse o sistema com suas credenciais.
         </p>
+
         <form
           onSubmit={handleSubmit}
           className="mt-10 space-y-6"
@@ -102,7 +103,6 @@ export default function Login() {
           >
             {carregando ? "Entrando..." : "Entrar"}
           </button>
-
         </form>
 
         <p className="mt-6 text-center text-xs text-white/50">

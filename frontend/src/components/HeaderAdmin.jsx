@@ -23,7 +23,7 @@ export default function Header() {
           </Link>
 
           <Link
-            to="/livros"
+            to="/pesquisar"
             className="transition hover:text-orange-100"
           >
             Livros
