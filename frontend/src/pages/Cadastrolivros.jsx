@@ -85,15 +85,29 @@ export default function CadastroLivros() {
     setEnviando(true);
 
     try {
-      console.log("Livro cadastrado:", resultado.data);
+      const resposta = await fetch("http://localhost:3000/api/livros", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(resultado.data)
+      });
+
+      const dados = await resposta.json();
+
+      if (!resposta.ok) {
+        throw new Error(dados.mensagem || "Não foi possível cadastrar o livro.");
+      }
+
       setLivro(formularioVazio);
       setMensagem("Livro cadastrado com sucesso!");
-    } catch {
-      setMensagem("Erro ao cadastrar o livro.");
+    } catch (erro) {
+      setMensagem(erro.message || "Erro ao cadastrar o livro.");
     } finally {
       setEnviando(false);
     }
   }
+
 
   return (
     <main className="min-h-screen bg-black px-4 py-8 text-white">
