@@ -182,7 +182,6 @@ export default function Administrador() {
   }
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     carregarUsuarios();
   }, []);
 
