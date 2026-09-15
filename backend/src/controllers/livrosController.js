@@ -43,7 +43,9 @@ async function criar(req, res) {
   try {
     const { titulo, ano, editora, autor, imagem, descricao, paginas, categoria, nota } = req.body;
     
-    if (!titulo || !ano || !editora || !autor || !imagem || !descricao || !paginas || !categoria || !nota) {
+    const camposObrigatorios = [titulo, ano, editora, autor, imagem, descricao, paginas, categoria, nota];
+
+    if (camposObrigatorios.some((campo) => campo === undefined || campo === null || campo === '')) {
       return res.status(400).json({ 
         mensagem: 'Todos os campos são obrigatórios' 
       });
@@ -81,7 +83,9 @@ async function atualizar(req, res) {
       });
     }
     
-    if (!titulo || !ano || !editora || !autor || !imagem || !descricao || !paginas || !categoria || !nota) {
+    const camposObrigatorios = [titulo, ano, editora, autor, imagem, descricao, paginas, categoria, nota];
+
+    if (camposObrigatorios.some((campo) => campo === undefined || campo === null || campo === '')) {
       return res.status(400).json({ 
         mensagem: 'Todos os campos são obrigatórios' 
       });

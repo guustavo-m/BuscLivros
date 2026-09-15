@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { z } from "zod";
+import { requisicaoProtegida } from "../services/api";
 
 const livroSchema = z.object({
   titulo: z.string().trim().min(1, "Informe o título do livro."),
   autor: z.string().trim().min(1, "Informe o autor."),
   categoria: z.string().trim().min(1, "Informe a categoria."),
   editora: z.string().trim().min(1, "Informe a editora."),
+
   ano: z.preprocess(
     (valor) => (valor === "" ? undefined : Number(valor)),
     z.number({ invalid_type_error: "Informe um ano válido." }).int().min(1000, "Informe um ano válido.")
@@ -85,19 +87,13 @@ export default function CadastroLivros() {
     setEnviando(true);
 
     try {
-      const resposta = await fetch("http://localhost:3000/api/livros", {
+      await requisicaoProtegida("http://localhost:3000/livros", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify(resultado.data)
       });
-
-      const dados = await resposta.json();
-
-      if (!resposta.ok) {
-        throw new Error(dados.mensagem || "Não foi possível cadastrar o livro.");
-      }
 
       setLivro(formularioVazio);
       setMensagem("Livro cadastrado com sucesso!");
@@ -107,7 +103,6 @@ export default function CadastroLivros() {
       setEnviando(false);
     }
   }
-
 
   return (
     <main className="min-h-screen bg-black px-4 py-8 text-white">
