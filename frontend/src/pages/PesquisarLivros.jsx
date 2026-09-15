@@ -20,43 +20,55 @@ export default function PesquisarLivros() {
   ];
 
 
-  useEffect(() => {
-    async function buscarLivros() {
-      try {
-        setCarregando(true);
-        setErro("");
+useEffect(() => {
+  async function buscarLivro() {
+    try {
+      setCarregando(true);
+      setErro("");
 
-     const resposta = await fetch(
-  "http://localhost:3000/api/livros"
-);
+      const token = localStorage.getItem("jwtToken");
 
-        if (!resposta.ok) {
-          throw new Error("Erro ao buscar os livros");
+      const resposta = await fetch(
+        `http://localhost:3000/livros/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
+      );
 
-        const dados = await resposta.json();
-
-        setLivros(dados);
-      } catch (error) {
-        console.error(error);
-        setErro("Não foi possível carregar os livros.");
-      } finally {
-        setCarregando(false);
+      if (!resposta.ok) {
+        throw new Error("Livro não encontrado.");
       }
+
+      const dados = await resposta.json();
+
+      setLivro(dados);
+
+    } catch (error) {
+      console.error(error);
+      setErro("Não foi possível carregar o livro.");
+    } finally {
+      setCarregando(false);
     }
+  }
 
-    buscarLivros();
-  }, []);
+  buscarLivro();
+}, [id]);
 
-  const livrosFiltrados = livros.filter((livro) => {
-    const texto = pesquisa.toLowerCase().trim();
+const livrosFiltrados = livros.filter((livro) => {
+  const texto = pesquisa.toLowerCase().trim();
 
-    const correspondePesquisa = livro.nome?.toLowerCase().includes(texto) || livro.autor?.toLowerCase().includes(texto);
+  const correspondePesquisa =
+    livro.titulo?.toLowerCase().includes(texto) ||
+    livro.autor?.toLowerCase().includes(texto);
 
-    const correspondeCategoria = categoria === "Todos" || livro.categoria?.toLowerCase() === categoria.toLowerCase();
+  const correspondeCategoria =
+    categoria === "Todos" ||
+    livro.categoria?.toLowerCase() === categoria.toLowerCase();
 
-    return correspondePesquisa && correspondeCategoria;
-  });
+  return correspondePesquisa && correspondeCategoria;
+});
 
   return (
     <main className="min-h-screen bg-[#080808] text-white px-5 py-8">

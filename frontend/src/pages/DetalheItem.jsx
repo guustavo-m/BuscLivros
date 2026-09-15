@@ -16,7 +16,7 @@ export default function DetalheItem() {
         setCarregando(true);
 
         const resposta = await fetch(
-          `http://localhost:3000/api/livros/${id}`
+          `http://localhost:3000/livros/ID/${id}`
         );
 
         if (!resposta.ok) {
@@ -97,7 +97,7 @@ export default function DetalheItem() {
 
             <Campo
               titulo="Nome"
-              valor={livro.nome}
+              valor={livro.titulo}
             />
 
             <Campo
@@ -146,7 +146,7 @@ export default function DetalheItem() {
 
               <img
                 src={livro.imagem}
-                alt={livro.nome}
+                alt={livro.titulo}
                 className="w-[300px] md:w-[380px] h-[380px] md:h-[430px] object-cover
                 "
               />
