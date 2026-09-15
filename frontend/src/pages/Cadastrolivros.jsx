@@ -25,3 +25,30 @@ const livroSchema = z.object({
     .string()
     .trim()
     .min(1, "Informe a editora."),
+
+     ano: z.preprocess(
+    (valor) => (
+      valor === "" ? undefined : Number(valor)
+    ),
+    z
+      .number({
+        invalid_type_error: "Informe um ano válido.",
+      })
+      .int()
+      .min(1000, "Informe um ano válido.")
+  ),
+
+  paginas: z.preprocess(
+    (valor) => (
+      valor === "" ? undefined : Number(valor)
+    ),
+    z
+      .number({
+        invalid_type_error:
+          "Informe um número de páginas válido.",
+      })
+      .int()
+      .positive(
+        "Informe um número de páginas válido."
+      )
+  ),
