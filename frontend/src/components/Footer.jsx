@@ -1,7 +1,17 @@
-import { FaInstagram, FaTiktok, FaYoutube,FaWhatsapp, FaPhone } from "react-icons/fa";
+import { FaInstagram, FaTiktok, FaYoutube, FaWhatsapp, FaPhone } from "react-icons/fa";
 import { IoBookOutline } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/useAuth";
 
 export default function Footer() {
+  const { autenticado, fazerLogout } = useAuth();
+  const navigate = useNavigate();
+
+  function sair() {
+    fazerLogout();
+    navigate("/");
+  }
+
   return (
     <footer className="bg-amber-600 text-white">
 
@@ -14,6 +24,7 @@ export default function Footer() {
             BUSCLIVROS
           </span>
         </div>
+
         <div className="flex flex-col gap-3 text-sm">
 
           <div className="flex items-center gap-2">
@@ -49,11 +60,19 @@ export default function Footer() {
             <span>3876-1234</span>
           </div>
 
+          {autenticado && (
+            <button
+              onClick={sair}
+              className="mt-2 w-fit rounded-md bg-white px-5 py-2 font-medium text-[#df7916] transition hover:bg-orange-50"
+            >
+              SAIR
+            </button>
+          )}
+
         </div>
 
       </div>
 
-      {/* Copyright */}
       <div className="border-t border-orange-300/40 py-4 text-center text-xs">
         © BUSCLIVROS
       </div>
