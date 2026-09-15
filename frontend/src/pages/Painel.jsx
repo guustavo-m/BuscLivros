@@ -3,7 +3,7 @@ import { FaTrash, FaSyncAlt, FaEdit, FaSave, FaTimes } from "react-icons/fa";
 import Layout from "../components/Layout";
 
 export default function Administrador() {
-  const API_URL = "http://localhost:3000&quot";
+  const API_URL = "http://localhost:3000";
   const [usuarios, setUsuarios] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
@@ -182,6 +182,7 @@ export default function Administrador() {
   }
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     carregarUsuarios();
   }, []);
 
